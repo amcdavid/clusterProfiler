@@ -104,12 +104,22 @@ compareCluster <- function(geneClusters, fun="enrichGO", data='', ...) {
     if (is.null(keytype)) keytype <- "UNKNOWN"
     readable <- params[['readable']]
     if (length(readable) == 0) readable <- FALSE
-    
+
     res@keytype <- keytype
     res@readable <- as.logical(readable)
     res@fun <- params[['fun']]
 
     return(res)
+}
+
+## via https://stackoverflow.com/a/43329945/
+match.call.defaults = function(...) {
+    call <- evalq(match.call(expand.dots = FALSE), parent.frame(1))
+    formals <- evalq(formals(), parent.frame(1))
+
+    for(i in setdiff(names(formals), names(call)))
+        call[i] <- list( formals[[i]] )
+    match.call(sys.function(sys.parent()), call, expand.dots = TRUE)
 }
 
 extract_params <- function(x) {
@@ -118,7 +128,7 @@ extract_params <- function(x) {
 
     y <- gsub('"', '', y) %>%
         ## sub(".*\\(", "", .) %>%
-        sub("[^\\(]+\\(", "", .) %>% 
+        sub("[^\\(]+\\(", "", .) %>%
         sub("\\)$", "", .) %>%
         gsub("\\s+", "", .)
 

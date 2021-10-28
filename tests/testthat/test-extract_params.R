@@ -1,7 +1,8 @@
 context("Test extract_params")
 
 test_function = function(x, y, z = 'z'){
-  this_call = match.call(expand.dots = TRUE)
+  this_call = match.call.defaults()
+  #this_call = rlang::call_args(sys.call(sys.parent()))
   return(extract_params(this_call))
 }
 
